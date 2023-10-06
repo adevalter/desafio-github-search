@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
+import br.com.igorbag.githubsearch.databinding.RepositoryItemBinding
 import br.com.igorbag.githubsearch.domain.Repository
 
 class RepositoryAdapter(private val repositories: List<Repository>) :
@@ -15,9 +16,8 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
 
     // Cria uma nova view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.repository_item, parent, false)
-        return ViewHolder(view)
+        val itemBinding = RepositoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(itemBinding)
     }
 
     // Pega o conteudo da view e troca pela informacao de item de uma lista
@@ -35,13 +35,27 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
         //holder.favorito.setOnClickListener {
         //    btnShareLister(repositores[position])
         //}
+        holder.itemBinding.tvNomeRepositorio.text = repositories[position].name
+        //share
+        holder.itemBinding.ivShare.setOnClickListener{
+            btnShareLister(repositories[position])
+        }
+        holder.itemBinding.clCardContent.setOnClickListener {
+            carItemLister(repositories[position])
+        }
+
+
+
+
     }
 
     // Pega a quantidade de repositorios da lista
     //@TODO 9 - realizar a contagem da lista
-    override fun getItemCount(): Int = 0
+    override fun getItemCount(): Int {
+        return repositories.size
+    }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val itemBinding: RepositoryItemBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         //@TODO 10 - Implementar o ViewHolder para os repositorios
         //Exemplo:
         //val atributo: TextView
@@ -50,7 +64,10 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
         //    view.apply {
         //        atributo = findViewById(R.id.item_view)
         //    }
+        init{
+            itemBinding.tvNomeRepositorio
 
+        }
     }
 }
 
